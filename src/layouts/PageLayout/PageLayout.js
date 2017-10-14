@@ -3,17 +3,58 @@ import { IndexLink, Link } from 'react-router'
 import PropTypes from 'prop-types'
 import './PageLayout.scss'
 
-export const PageLayout = ({ children }) => (
-  <div className='container text-center'>
-    <h1>React Redux Starter Kit</h1>
-    <IndexLink to='/' activeClassName='page-layout__nav-item--active'>Home</IndexLink>
-    {' · '}
-    <Link to='/counter' activeClassName='page-layout__nav-item--active'>Counter</Link>
-    <div className='page-layout__viewport'>
-      {children}
-    </div>
-  </div>
-)
+import AppBar from 'material-ui/AppBar'
+import Toolbar from 'material-ui/Toolbar'
+import Button from 'material-ui/Button'
+import IconButton from 'material-ui/IconButton'
+import { withStyles } from 'material-ui/styles'
+import TextField from 'material-ui/TextField';
+
+class PageLayout extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {searchText: ''}
+  }
+
+  onSearchClick () {
+    let searchText = this.state.searchText;
+
+    // do search?
+  }
+
+  onChange(e) {
+    this.setState({searchText: e.target.value})
+  }
+
+  render () {
+    return (
+      <div className='root text-center'>
+        <AppBar position='static'>
+          <Toolbar className='toolBar'>
+            Stock the Prices
+            <form className='form' >
+              <TextField 
+                value={this.state.searchText} 
+                onChange={this.onChange.bind(this)}
+              />
+              
+              <Button 
+                color="contrast" 
+                onClick={this.onSearchClick.bind(this)}
+              >
+                Search
+              </Button>
+            </form>
+          </Toolbar>
+        </AppBar>
+        <div className='page-layout__viewport'>
+          {this.props.children}
+        </div>
+      </div>
+      )
+  }
+}
+
 PageLayout.propTypes = {
   children: PropTypes.node,
 }
