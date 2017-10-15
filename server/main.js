@@ -5,44 +5,42 @@ const logger = require('../build/lib/logger')
 const webpackConfig = require('../build/webpack.config')
 const project = require('../project.config')
 const compress = require('compression')
-const Twitter = require('node-tweet-stream');
+const Twitter = require('node-tweet-stream')
+const TwitterStreamChannels = require('twitter-stream-channels')
+const credentials = require('../twitter-credentials.json')
 
+const client = new TwitterStreamChannels(credentials);
 const app = express()
 app.use(compress())
-let gSocket = null;
-// Set up a new twitter stream w/ tokens as environment variables
-const tweetStream = new Twitter({
-    consumer_key: process.env.twitter_consumer_key,
-    consumer_secret: process.env.twitter_consumer_secret,
-    token: process.env.twitter_token,
-    token_secret: process.env.twitter_token_secret
-});
 
-// New tweets will come in here, we'll emit them to the client side via socket.
-// TODO: figure out which fields we want to
-tweetStream.on('tweet', function (tweet) {
-  if (gSocket) {
-    gSocket.emit('newTweet', tweet.text);
-  }
-})
- 
-tweetStream.on('error', function (err) {
-  console.log('Error connecting', err);
-})
- 
-// Hashtags we want to filter by
-tweetStream.track('economy')
+// Create our stocks and their associated keywords to filter
+const channels = {
+  "google" : ['goog', 'google'],
+  "facebook" : ['facebook', 'mark zuckerberg', 'oculus'],
+};
+
+const stream = client.streamChannels({track:channels, timeout:50000});
 
 // Handle web sockets
 const http = require('http').Server(app);
 let io = require('socket.io')(http);
 
+
 io = io.on('connection', function (socket) {
   console.log('user connected');
-  gSocket = socket;
   socket.on('disconnect', function () {
     console.log('user disconnected');
   });
+
+  // Stream out information related to google
+  stream.on('channels/google',function(tweet){
+		socket.emit('googleTweet', tweet.text);
+  });
+
+  // Stream out information related to facebook
+  stream.on('channels/facebook',function(tweet){
+    socket.emit('facebookTweet', tweet.text);
+	});
 
 });
 

@@ -33,3 +33,4 @@ chrome-user-data
 *react*min*.js
 !src/node_modules
 dist/
+twitter-credentials.json

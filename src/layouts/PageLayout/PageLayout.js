@@ -18,11 +18,19 @@ class PageLayout extends React.Component {
     this.state = {searchText: '', tweets:''}
   }
 
-    componentDidMount() {
+  componentDidMount() {
     const that = this;
-      if (!this.state.tweets) {
-      socket.on('newTweet', function (data) {
-        that.setState({ tweets: data });
+    if (!this.state.tweets) {
+      socket.on('googleTweet', function (data) {
+        if (that.state.searchText === "google") {
+          that.setState({ tweets: data });
+        }
+      });
+      
+      socket.on('facebookTweet', function (data) {
+        if (that.state.searchText === "facebook") {
+          that.setState({ tweets: data });
+        }
       });
     }
   }
@@ -30,7 +38,6 @@ class PageLayout extends React.Component {
   onSearchClick () {
     let searchText = this.state.searchText;
 
-    // do search?
   }
 
   onChange(e) {
@@ -42,7 +49,7 @@ class PageLayout extends React.Component {
       <div className='root text-center'>
         <AppBar position='static'>
           <Toolbar className='toolBar'>
-            Stock the Prices{this.state.tweets}
+            Stock the Prices
             <form className='form' >
               <TextField 
                 value={this.state.searchText} 
@@ -60,6 +67,7 @@ class PageLayout extends React.Component {
         </AppBar>
         <div className='page-layout__viewport'>
           {this.props.children}
+          {this.state.tweets}
         </div>
       </div>
       )
