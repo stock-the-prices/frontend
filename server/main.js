@@ -5,10 +5,53 @@ const logger = require('../build/lib/logger')
 const webpackConfig = require('../build/webpack.config')
 const project = require('../project.config')
 const compress = require('compression')
+const Twitter = require('node-tweet-stream');
 
 const app = express()
 app.use(compress())
+let gSocket = null;
+// Set up a new twitter stream w/ tokens as environment variables
+const tweetStream = new Twitter({
+    consumer_key: process.env.twitter_consumer_key,
+    consumer_secret: process.env.twitter_consumer_secret,
+    token: process.env.twitter_token,
+    token_secret: process.env.twitter_token_secret
+});
 
+// New tweets will come in here, we'll emit them to the client side via socket.
+// TODO: figure out which fields we want to
+tweetStream.on('tweet', function (tweet) {
+  if (gSocket) {
+    gSocket.emit('newTweet', tweet.text);
+  }
+})
+ 
+tweetStream.on('error', function (err) {
+  console.log('Error connecting', err);
+})
+ 
+// Hashtags we want to filter by
+tweetStream.track('economy')
+
+// Handle web sockets
+const http = require('http').Server(app);
+let io = require('socket.io')(http);
+
+io = io.on('connection', function (socket) {
+  console.log('user connected');
+  gSocket = socket;
+  socket.on('disconnect', function () {
+    console.log('user disconnected');
+  });
+
+});
+
+// Socket listens on port 3002
+http.listen(3002, function (err) {
+  if (err) {
+    return logger.error(err.message);
+  }
+});
 // ------------------------------------
 // Apply Webpack HMR Middleware
 // ------------------------------------

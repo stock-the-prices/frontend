@@ -9,11 +9,22 @@ import Button from 'material-ui/Button'
 import IconButton from 'material-ui/IconButton'
 import { withStyles } from 'material-ui/styles'
 import TextField from 'material-ui/TextField';
+import io from 'socket.io-client';
+const socket = io();
 
 class PageLayout extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {searchText: ''}
+    this.state = {searchText: '', tweets:''}
+  }
+
+    componentDidMount() {
+    const that = this;
+      if (!this.state.tweets) {
+      socket.on('newTweet', function (data) {
+        that.setState({ tweets: data });
+      });
+    }
   }
 
   onSearchClick () {
@@ -31,7 +42,7 @@ class PageLayout extends React.Component {
       <div className='root text-center'>
         <AppBar position='static'>
           <Toolbar className='toolBar'>
-            Stock the Prices
+            Stock the Prices{this.state.tweets}
             <form className='form' >
               <TextField 
                 value={this.state.searchText} 
