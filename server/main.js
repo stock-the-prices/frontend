@@ -8,8 +8,8 @@ const compress = require('compression')
 const Twitter = require('node-tweet-stream')
 const TwitterStreamChannels = require('twitter-stream-channels')
 const credentials = require('../twitter-credentials.json')
+const client = new TwitterStreamChannels(credentials)
 
-const client = new TwitterStreamChannels(credentials);
 const app = express()
 app.use(compress())
 
@@ -17,13 +17,13 @@ app.use(compress())
 const channels = {
   "google" : ['goog', 'google'],
   "facebook" : ['facebook', 'mark zuckerberg', 'oculus'],
-};
+}
 
-const stream = client.streamChannels({track:channels, timeout:50000});
+const stream = client.streamChannels({track:channels, timeout:50000})
 
 // Handle web sockets
-const http = require('http').Server(app);
-let io = require('socket.io')(http);
+const http = require('http').Server(app)
+let io = require('socket.io')(http)
 
 
 io = io.on('connection', function (socket) {
