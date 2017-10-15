@@ -11,6 +11,26 @@ class Content extends React.Component {
 		this.setState({searchText: newProps.searchText})
 	}
 
+		// to receive tweets
+
+	/*
+	-		import io from 'socket.io-client';
+ -		const socket = io();
+		 if (!this.state.tweets) {
+ -      socket.on('googleTweet', function (data) {
+ -        if (that.state.searchText === "google") {
+ -          that.setState({ tweets: data });
+ -        }
+ -      });
+ -      
+ -      socket.on('facebookTweet', function (data) {
+ -        if (that.state.searchText === "facebook") {
+ -          that.setState({ tweets: data });
+ -        }
+ -      });
+ -    }
+	*/
+
 	render () {
 
 		// TODO, define actual layout
