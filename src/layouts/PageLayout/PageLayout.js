@@ -37,35 +37,11 @@ class PageLayout extends React.Component {
 
   onSearchClick () {
     let searchText = this.state.searchText;
-
-  }
-
-  onChange(e) {
-    this.setState({searchText: e.target.value})
-  }
-
+  
   render () {
     return (
       <div className='root text-center'>
-        <AppBar position='static'>
-          <Toolbar className='toolBar'>
-            Stock the Prices
-            <form className='form' >
-              <TextField 
-                value={this.state.searchText} 
-                onChange={this.onChange.bind(this)}
-              />
-              
-              <Button 
-                color="contrast" 
-                onClick={this.onSearchClick.bind(this)}
-              >
-                Search
-              </Button>
-            </form>
-          </Toolbar>
-        </AppBar>
-        <div className='page-layout__viewport'>
+        <div className='content-area page-layout__viewport'>
           {this.props.children}
           {this.state.tweets}
         </div>
