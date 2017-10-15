@@ -4,11 +4,11 @@ import './HomeView.scss'
 class Content extends React.Component { 
 	constructor(props) {
 		super(props)
-		this.state = {company: props.searchText}
+		this.state = {searchText: props.searchText, tweets: ''}
 	}
 
 	componentWillReceiveProps(newProps) {
-		this.setState({company: newProps.searchText});
+		this.setState({searchText: newProps.searchText})
 	}
 
 	render () {
@@ -20,18 +20,18 @@ class Content extends React.Component {
 		return (
 				<div className='container-fluid'>
           <div className='row'>
-          <div className='col-md-6'>
-            <h1>{this.state.company}</h1>
-          </div>
-          <div className='col-md-6'>
-            <h1>component 2</h1>
-          </div>
-          <div className='col-md-6'>
-            <h1>component 3</h1>
-          </div>
-          <div className='col-md-6'>
-            <h1>component 4</h1>
-          </div>
+	          <div className='col-md-6'>
+	            <h1>{this.state.searchText}</h1>
+	          </div>
+	          <div className='col-md-6'>
+	            <h1>component 2</h1>
+	          </div>
+	          <div className='col-md-6'>
+	            <h1>component 3</h1>
+	          </div>
+	          <div className='col-md-6'>
+	            <h1>component 4</h1>
+	          </div>
           </div>
         </div>
 			)
