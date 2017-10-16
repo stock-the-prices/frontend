@@ -42,7 +42,7 @@ class Content extends React.Component {
 				<div className='container-fluid'>
           <div className='row'>
             <div className='col-md-6'>
-              <h1>{this.state.company}</h1>
+              <h1>{this.state.searchText}</h1>
             </div>
             <div className='col-md-6'>
               <Twitter tweetIDs='' />
