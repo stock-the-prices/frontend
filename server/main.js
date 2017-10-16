@@ -33,12 +33,14 @@ io = io.on('connection', function (socket) {
 
   // Stream out information related to google
   stream.on('channels/google',function(tweet){
-		socket.emit('googleTweet', tweet.text);
+		//socket.emit('googleTweet', tweet.text);
+        socket.emit('googleTweet', tweet);
   });
 
   // Stream out information related to facebook
   stream.on('channels/facebook',function(tweet){
-    socket.emit('facebookTweet', tweet.text);
+    //socket.emit('facebookTweet', tweet.text);
+    socket.emit('facebookTweet', tweet);
 	});
 
 });
