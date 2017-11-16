@@ -28,21 +28,21 @@ class HomeView extends React.Component {
   }
 
   render () {
-    let content = (<Content searchText={this.state.searchText}/>)
+    let content = this.state.searched ? (<Content searchText={this.state.searchText}/>) : (<Splash/>)
 
     return (
       <div className='content-area'>
         <AppBar position='static'>
           <Toolbar className='toolBar'>
-            Adogpt
+            Stock The Prices
             <form className='form' >
-              <TextField 
-                value={this.state.fieldValue} 
+              <TextField
+                value={this.state.fieldValue}
                 onChange={this.onChange.bind(this)}
               />
-              
-              <Button 
-                color="contrast" 
+
+              <Button
+                color="contrast"
                 onClick={this.onSearchClick.bind(this)}
               >
                 Search
