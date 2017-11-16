@@ -15,15 +15,23 @@ class Twitter extends React.Component {
         //
         this.state = {
             //tweetIDs: props.tweetIDs
-            tweetIDs: ['650678375539974144', '672933969432870913', '650813687998074881', '650804521661243392']
+            tweetIDs: ['650678375539974144', '672933969432870913', '650813687998074881', '650804521661243392'],
+            tweets: this.props.tweets,
         }
     }
+
+
 
     createTweet (tweetID, index) {
         return <TweetEmbed key={index} cards='hidden' conversation='none' id={tweetID} />;
     }
 
-    loadMore() {
+    createTweetObj (tweetInfo, index) {
+        return <Tweet key={index} id={tweetInfo.id} tweet={tweetInfo} />;
+    }
+
+    loadItems(page) {
+        let self = this;
     }
 
 	render () {
@@ -33,33 +41,39 @@ class Twitter extends React.Component {
         //      scrollable list of tweets
         //      sorted chronologically
 
+
+//----------------------------- deprecated
         //<TweetEmbed
         //    cards='hidden'
         //    conversation='none'
         //    id='650678375539974144'
         ///>
 
-        let tweetIDs = this.state.tweetIDs;
-        let tweetObjs = tweetIDs.map((tweetID, index) => // fulltweet obj
-            this.createTweet(tweetID, index)
-        );
+        //let tweetIDs = this.state.tweetIDs;
+        //let tweetObjs = tweetIDs.map((tweetID, index) => // fulltweet obj
+        //    this.createTweet(tweetID, index)
+        //);
+//-------------------------------
+
+
 
         // custom tweet obj from props, waiting on stream
         // https://scotch.io/tutorials/build-a-real-time-twitter-stream-with-node-and-react-js
-        //let content = this.props.tweets.map( (tweet) =>
-        //    <Tweet key={tweet.twid} tweet={tweet} />
-        //);
+        let tweets = this.props.tweets;
+        let content = tweets.map((tweet, index) =>
+            this.createTweetObj(tweet, index)
+        );
 
 		return (
             <div style={{overflowY: 'scroll', height: '100%'}}>
                 <InfiniteScroll
                     pageStart={0}
-                    loadMore{...this.loadMore()}
+                    loadMore={this.loadItems.bind(this)}
                     hasMore={false}
                     loader={<div className="loader">Loading ...</div>}
                     useWindow={false}
                 >
-                    {tweetObjs}
+                    {content}
                 </InfiniteScroll>
             </div>
 		)
