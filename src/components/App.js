@@ -17,8 +17,6 @@ class App extends React.Component {
     return false
   }
 
-
-
   render () {
     return (
       <Provider store={this.props.store}>

@@ -41,10 +41,6 @@ class Content extends React.Component {
 
 	render () {
 
-		// TODO, define actual layout
-		// keep it as 4 equal squares for now
-		// pass down data to children as needed
-
 		return (
 				<div className='container-fluid'>
           <div className='row'>
