@@ -18,23 +18,47 @@ class Content extends React.Component {
 	}
 
 	componentDidMount() {
-
 		const that = this;
 		const socket = io('http://localhost:3002');
 
 		socket.on('googleTweet', function (data) {
-			if (that.state.searchText === "google" && that.state.tweets.length < 10) {
-				//console.log(data);
-				that.state.tweets.push(data);
-				that.setState(that);
+
+			if (that.state.searchText === "google" || that.state.searchText === "GOOGL") {
+				if (that.state.tweets.length < 10) {
+					//console.log(data);
+					that.state.tweets.push(data);
+					that.setState(that);
+				}
 			}
 		});
 
-		socket.on('googleTweet', function (data) {
-			if (that.state.searchText === "facebook" && that.state.tweets.length < 10) {
-				//console.log(data);
-				that.state.tweets.push(data);
-				that.setState(that);
+		socket.on('facebookTweet', function (data) {
+			if (that.state.searchText === "facebook" || that.state.searchText === "FB") {
+				if (that.state.tweets.length < 10) {
+					//console.log(data);
+					that.state.tweets.push(data);
+					that.setState(that);
+				}
+			}
+		});
+
+		socket.on('appleTweet', function (data) {
+			if (that.state.searchText === "apple" || that.state.searchText === "AAPL") {
+				if (that.state.tweets.length < 10) {
+					//console.log(data);
+					that.state.tweets.push(data);
+					that.setState(that);
+				}
+			}
+		});
+
+		socket.on('testTweet', function (data) {
+			if (that.state.searchText === "TST" || that.state.searchText === "test") {
+				if (that.state.tweets.length < 10) {
+					//console.log(data);
+					that.state.tweets.push(data);
+					that.setState(that);
+				}
 			}
 		});
 	}
@@ -43,21 +67,21 @@ class Content extends React.Component {
 
 		return (
 				<div className='container-fluid'>
-          <div className='row'>
-            <div className='col-md-6'>
-              <h1>{this.state.searchText}</h1>
-            </div>
-            <div className='col-md-6'>
-              <Twitter tweetIDs='' tweets={this.state.tweets} />
-            </div>
-            <div className='col-md-6'>
-              <h1>component 3</h1>
-            </div>
-            <div className='col-md-6'>
-              <h1>component 4</h1>
-            </div>
-          </div>
-        </div>
+		          <div className='row' style={{marginTop:'1em'}}>
+		            <div className='col-md-6 text-center'>
+		              <h1>{this.state.searchText}</h1>
+		            </div>
+		            <div className='col-md-6'>
+		              <Twitter tweetIDs='' tweets={this.state.tweets} />
+		            </div>
+		            <div className='col-md-6'>
+		              <h1>component 3</h1>
+		            </div>
+		            <div className='col-md-6'>
+		              <h1>component 4</h1>
+		            </div>
+		          </div>
+		        </div>
 			)
 	}
 }

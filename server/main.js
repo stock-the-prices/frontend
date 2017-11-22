@@ -14,8 +14,10 @@ app.use(compress())
 
 // Create our stocks and their associated keywords to filter
 const channels = {
-  "google" : ['goog', 'google'],
+  "google" : ['googl', 'google'],
   "facebook" : ['facebook', 'mark zuckerberg', 'oculus'],
+  "apple" : ['apple inc', 'apple', 'tim cook'],
+  "test" : ['giuseppe'],
 }
 
 const stream = client.streamChannels({track:channels, timeout:50000})
@@ -42,6 +44,18 @@ io = io.on('connection', function (socket) {
     //socket.emit('facebookTweet', tweet.text);
     socket.emit('facebookTweet', tweet);
 	});
+
+    // Stream out information related to apple
+    stream.on('channels/apple',function(tweet){
+      //socket.emit('facebookTweet', tweet.text);
+      socket.emit('appleTweet', tweet);
+  	});
+
+    // Stream out information related to test
+    stream.on('channels/test',function(tweet){
+      //socket.emit('facebookTweet', tweet.text);
+      socket.emit('testTweet', tweet);
+    });
 
 });
 
