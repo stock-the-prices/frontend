@@ -3,6 +3,7 @@ import './HomeView.scss'
 import Twitter from './twitter/Twitter'
 import News from './stock/News'
 import Rating from './rating/Rating'
+import Stock from './stock/Stock'
 import io from 'socket.io-client'
 
 // temp article info
@@ -168,7 +169,7 @@ class Content extends React.Component {
 				<div className='container-fluid'>
 		          <div className='row' style={{marginTop:'1em'}}>
 		            <div className='col-md-6'>
-		              <h1>{this.state.searchText}</h1>
+						<Stock stockname={this.state.searchText}/>
 		            </div>
 		            <div className='col-md-6'>
 		              <Twitter tweetIDs='' tweets={this.state.tweets} />
