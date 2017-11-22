@@ -26,6 +26,7 @@ class Rating extends React.Component {
     	that.setState({stockname: json._id, rating: rating});
     })
     .catch(function(error) { console.log("Error", error) })
+        that.setState({stockname: this.props.stockname, rating: "B+"});
 	}
 
 
@@ -38,14 +39,52 @@ class Rating extends React.Component {
     }
 	render () {
         let articles = this.props.articles;
+        let AAPL = (
+            <div>
+
+            <p>+ new product launches</p>
+            <p>+ positive social media coverage</p>
+            <p>+ positive trend</p>
+            <p>- competitive market</p>
+            </div>
+        )
+
+        let GOOGL = (
+            <div>
+
+            <p>+ new product launches</p>
+            <p>- neutral social media converage</p>
+            <p>- competitive market</p>
+            </div>
+        )
+
+        let FB = (
+            <div>
+
+            <p>+ positive trend</p>
+            <p>- recent scandals</p>
+            </div>
+        )
+
+        let TST = (
+            <div>
+
+            <p>+ new product launches</p>
+            <p>- neutral social media converage</p>
+            <p>- competitive market</p>
+            </div>
+        )
+
+        let content = {AAPL, GOOGL, FB, TST}
 
 		return (
 			<div>
             <div>
-            	{this.state.stockname}
+            	<h1>{this.state.stockname}</h1>
         	</div>
         	<div>
             	Rating: {this.state.rating}
+                {content[this.state.stockname]}
             </div>
             </div>
 		)
