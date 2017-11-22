@@ -23,6 +23,17 @@ class HomeView extends React.Component {
     this.setState({searchText: this.state.fieldValue})
   }
 
+  onSearchEnter (ev) {
+    // console.log(`Pressed keyCode ${ev.key}`);
+    if (ev.key === 'Enter') {
+        this.setState({searched: true});
+
+        // update children
+        this.setState({searchText: this.state.fieldValue})
+        ev.preventDefault();
+    }
+  }
+
   onChange(e) {
     this.setState({fieldValue: e.target.value})
   }
@@ -39,6 +50,7 @@ class HomeView extends React.Component {
               <TextField
                 value={this.state.fieldValue}
                 onChange={this.onChange.bind(this)}
+                onKeyPress={this.onSearchEnter.bind(this)}
               />
 
               <Button
