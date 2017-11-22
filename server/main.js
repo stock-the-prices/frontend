@@ -8,10 +8,19 @@ const compress = require('compression')
 const TwitterStreamChannels = require('twitter-stream-channels')
 const credentials = require('../twitter-credentials.json')
 const client = new TwitterStreamChannels(credentials)
+const MongoClient = require('mongodb').MongoClient;
+let db;
+
+MongoClient.connect("mongodb://dqianthebest:password@ds131900.mlab.com:31900/heroku_n36xdb93", function(err, database) {
+  if(err) throw err;
+
+  db = database;
+
+  // Start the application after the database connection is ready
+});
 
 const app = express()
 app.use(compress())
-
 // Create our stocks and their associated keywords to filter
 const channels = {
   "google" : ['googl', 'google'],
@@ -85,6 +94,29 @@ if (project.env === 'development') {
     path: '/__webpack_hmr'
   }))
 
+  // app.get('/rate:stockid', function(req, res) {
+  //   res.send("Hello");
+  // });
+
+
+  app.get('/api/rateGOOGL', function(req, res) {
+   db.collection("stock").findOne({_id:"GOOGL"}, function(err, doc) {
+      if (err) { res.end(); return; }
+      res.json(doc);
+      return;
+    });
+
+  });
+
+  app.get('/api/rateAAPL', function(req, res) {
+   db.collection("stock").findOne({_id:"AAPL"}, function(err, doc) {
+      if (err) { res.end(); return; }
+      res.json(doc);
+      return;
+    });
+
+  });
+
   // Serve static assets from ~/public since Webpack is unaware of
   // these files. This middleware doesn't need to be enabled outside
   // of development since this directory will be copied into ~/dist
@@ -119,5 +151,8 @@ if (project.env === 'development') {
   // server in production.
   app.use(express.static(path.resolve(project.basePath, project.outDir)))
 }
+
+
+
 
 module.exports = app
