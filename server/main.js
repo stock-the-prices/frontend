@@ -8,6 +8,7 @@ const compress = require('compression')
 const TwitterStreamChannels = require('twitter-stream-channels')
 const credentials = require('../twitter-credentials.json')
 const client = new TwitterStreamChannels(credentials)
+const yahooFinance = require('yahoo-finance');
 
 const app = express()
 app.use(compress())
@@ -55,6 +56,23 @@ io = io.on('connection', function (socket) {
     stream.on('channels/test',function(tweet){
       //socket.emit('facebookTweet', tweet.text);
       socket.emit('testTweet', tweet);
+    });
+
+    socket.on('getStockInfo', function(stockname) {
+        console.log('getting stock info about ' + stockname);
+
+        yahooFinance.quote({
+          symbol: stockname,
+          modules: [ 'price' ]
+      }, function (err, data) {
+              var priceInfo =
+                  {
+                      company: data.price.longName,
+                      regularMarketPrice: data.price.regularMarketPrice,
+                      regularMarketTime: data.price.regularMarketTime,
+                  }
+              socket.emit('stockPriceInfo', priceInfo);
+        });
     });
 
 });

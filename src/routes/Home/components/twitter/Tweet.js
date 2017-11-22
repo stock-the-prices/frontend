@@ -25,7 +25,7 @@ class Tweet extends React.Component {
 
     render() {
         var tweet = this.props.tweet;
-        console.log(tweet);
+        //console.log(tweet);
 
         return (
             <div style={{marginBottom:'0.5em'}}>

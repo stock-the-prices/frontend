@@ -21,20 +21,27 @@ class HomeView extends React.Component {
     this.resetClick = this.resetClick.bind(this)
   }
 
-  onSearchClick () {
-    this.setState({searched: true});
-
-    // update children
-    this.setState({searchText: this.state.fieldValue})
-  }
-
   resetClick() {
+      if (this.state.searched === false)
+        return;
+        
       this.setState({searched: false});
 
       // update children
       this.setState({searchText: ''})
   }
 
+  onSearchClick () {
+    if (this.state.fieldValue === ''){
+        this.resetClick();
+        return;
+    }
+
+    this.setState({searched: true});
+
+    // update children
+    this.setState({searchText: this.state.fieldValue})
+  }
   onClickStockIcon (stockname) {
       this.setState({
           searchText: stockname,
