@@ -2,6 +2,7 @@ import React from 'react'
 import './HomeView.scss'
 import Twitter from './twitter/Twitter'
 import News from './stock/News'
+import Rating from './rating/Rating'
 import Stock from './stock/Stock'
 import io from 'socket.io-client'
 
@@ -154,12 +155,14 @@ class Content extends React.Component {
 	}
 
 	render () {
-
+		// let stockname = null;
 		var notnull = articles !== null;
 		var matching = false;
 		if (notnull){
 			if (articles[0].source.id === this.state.searchText)
 				matching = true;
+			// if (articles[0].source.id === "GOOGL") stockname = "GOOGL";
+			// if (articles[0].source.id === "AAPL") stockname = "AAPL";
 		}
 
 		return (
@@ -175,7 +178,7 @@ class Content extends React.Component {
 		              {matching && <News articles={articles}/>}
 		            </div>
 		            <div className='col-md-6'>
-		              <h1>component 4</h1>
+		              {this.state.stockname && <Rating stockname={this.state.stockname}/>}
 		            </div>
 		          </div>
 		        </div>
