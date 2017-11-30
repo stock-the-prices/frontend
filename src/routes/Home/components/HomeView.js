@@ -13,20 +13,47 @@ import TextField from 'material-ui/TextField'
 class HomeView extends React.Component {
   constructor(props) {
     super(props)
+
     this.state = {fieldValue: '', searchText: '', searched: false}
+    this.onSearchClick = this.onSearchClick.bind(this)
+    this.onSearchEnter = this.onSearchEnter.bind(this)
+    this.onClickStockIcon = this.onClickStockIcon.bind(this)
+    this.resetClick = this.resetClick.bind(this)
+  }
+
+  resetClick() {
+      if (this.state.searched === false)
+        return;
+        
+      this.setState({searched: false});
+
+      // update children
+      this.setState({searchText: ''})
   }
 
   onSearchClick () {
+    if (this.state.fieldValue === ''){
+        this.resetClick();
+        return;
+    }
+
     this.setState({searched: true});
 
     // update children
     this.setState({searchText: this.state.fieldValue})
   }
+  onClickStockIcon (stockname) {
+      this.setState({
+          searchText: stockname,
+          searched: true
+      });
+  }
 
   onSearchEnter (ev) {
     // console.log(`Pressed keyCode ${ev.key}`);
     if (ev.key === 'Enter') {
-        this.setState({searched: true});
+
+        this.setState({searched: this.state.fieldValue !== ''});
 
         // update children
         this.setState({searchText: this.state.fieldValue})
@@ -39,13 +66,18 @@ class HomeView extends React.Component {
   }
 
   render () {
-    let content = this.state.searched ? (<Content searchText={this.state.searchText}/>) : (<Splash/>)
+    let content = this.state.searched ? (<Content searchText={this.state.searchText}/>) : (<Splash onClickStockIcon={this.onClickStockIcon} />)
 
     return (
       <div className='content-area'>
         <AppBar position='static'>
           <Toolbar className='toolBar'>
-            Stock The Prices
+          <Button
+              color="contrast"
+              onClick={this.resetClick.bind(this)}
+            >
+              Stock The Prices
+           </Button>
             <form className='form' >
               <TextField
                 value={this.state.fieldValue}
@@ -62,7 +94,6 @@ class HomeView extends React.Component {
             </form>
           </Toolbar>
         </AppBar>
-
         {content}
       </div>
       )

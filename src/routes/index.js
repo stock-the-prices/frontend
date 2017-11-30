@@ -13,7 +13,8 @@ export const createRoutes = (store) => ({
   childRoutes : [
     CounterRoute(store)
   ]
-})
+}
+)
 
 /*  Note: childRoutes can be chunked or otherwise loaded programmatically
     using getChildRoutes with the following signature:

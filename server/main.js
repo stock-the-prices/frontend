@@ -9,13 +9,26 @@ const TwitterStreamChannels = require('twitter-stream-channels')
 const credentials = require('../twitter-credentials.json')
 const client = new TwitterStreamChannels(credentials)
 
+const MongoClient = require('mongodb').MongoClient;
+let db;
+
+MongoClient.connect("mongodb://dqianthebest:password@ds131900.mlab.com:31900/heroku_n36xdb93", function(err, database) {
+  if(err) throw err;
+
+  db = database;
+
+  // Start the application after the database connection is ready
+});
+
+const yahooFinance = require('yahoo-finance');
 const app = express()
 app.use(compress())
-
 // Create our stocks and their associated keywords to filter
 const channels = {
-  "google" : ['goog', 'google'],
+  "google" : ['googl', 'google'],
   "facebook" : ['facebook', 'mark zuckerberg', 'oculus'],
+  "apple" : ['apple inc', 'apple', 'tim cook'],
+  "test" : ['giuseppe'],
 }
 
 const stream = client.streamChannels({track:channels, timeout:50000})
@@ -42,6 +55,35 @@ io = io.on('connection', function (socket) {
     //socket.emit('facebookTweet', tweet.text);
     socket.emit('facebookTweet', tweet);
 	});
+
+    // Stream out information related to apple
+    stream.on('channels/apple',function(tweet){
+      //socket.emit('facebookTweet', tweet.text);
+      socket.emit('appleTweet', tweet);
+  	});
+
+    // Stream out information related to test
+    stream.on('channels/test',function(tweet){
+      //socket.emit('facebookTweet', tweet.text);
+      socket.emit('testTweet', tweet);
+    });
+
+    socket.on('getStockInfo', function(stockname) {
+        console.log('getting stock info about ' + stockname);
+
+        yahooFinance.quote({
+          symbol: stockname,
+          modules: [ 'price' ]
+      }, function (err, data) {
+              var priceInfo =
+                  {
+                      company: data.price.longName,
+                      regularMarketPrice: data.price.regularMarketPrice,
+                      regularMarketTime: data.price.regularMarketTime,
+                  }
+              socket.emit('stockPriceInfo', priceInfo);
+        });
+    });
 
 });
 
@@ -70,6 +112,29 @@ if (project.env === 'development') {
   app.use(require('webpack-hot-middleware')(compiler, {
     path: '/__webpack_hmr'
   }))
+
+  // app.get('/rate:stockid', function(req, res) {
+  //   res.send("Hello");
+  // });
+
+
+  app.get('/api/rateGOOGL', function(req, res) {
+   db.collection("stock").findOne({_id:"GOOGL"}, function(err, doc) {
+      if (err) { res.end(); return; }
+      res.json(doc);
+      return;
+    });
+
+  });
+
+  app.get('/api/rateAAPL', function(req, res) {
+   db.collection("stock").findOne({_id:"AAPL"}, function(err, doc) {
+      if (err) { res.end(); return; }
+      res.json(doc);
+      return;
+    });
+
+  });
 
   // Serve static assets from ~/public since Webpack is unaware of
   // these files. This middleware doesn't need to be enabled outside
@@ -105,5 +170,8 @@ if (project.env === 'development') {
   // server in production.
   app.use(express.static(path.resolve(project.basePath, project.outDir)))
 }
+
+
+
 
 module.exports = app
