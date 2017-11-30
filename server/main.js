@@ -113,28 +113,20 @@ if (project.env === 'development') {
     path: '/__webpack_hmr'
   }))
 
-  // app.get('/rate:stockid', function(req, res) {
-  //   res.send("Hello");
-  // });
 
+  // get ratings
+  app.get('/api/rate', function (req, res ) {
+    let stockId = req.query.stockId;
 
-  app.get('/api/rateGOOGL', function(req, res) {
-   db.collection("stock").findOne({_id:"GOOGL"}, function(err, doc) {
-      if (err) { res.end(); return; }
-      res.json(doc);
-      return;
-    });
+    // retrieve from db
+    db
+      .collection("stock")
+      .findOne({_id: stockId}, function (err,doc) {
+        if ( err ) { return res.end() }
 
-  });
-
-  app.get('/api/rateAAPL', function(req, res) {
-   db.collection("stock").findOne({_id:"AAPL"}, function(err, doc) {
-      if (err) { res.end(); return; }
-      res.json(doc);
-      return;
-    });
-
-  });
+        return res.json(doc)
+      })
+  }); 
 
   // Serve static assets from ~/public since Webpack is unaware of
   // these files. This middleware doesn't need to be enabled outside
