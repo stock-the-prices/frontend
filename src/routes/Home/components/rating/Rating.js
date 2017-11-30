@@ -26,7 +26,6 @@ class Rating extends React.Component {
     	that.setState({stockname: json._id, rating: rating});
     })
     .catch(function(error) { console.log("Error", error) })
-        that.setState({stockname: this.props.stockname, rating: "B+"});
 	}
 
 
