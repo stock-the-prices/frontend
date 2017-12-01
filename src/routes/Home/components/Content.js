@@ -13,11 +13,17 @@ class Content extends React.Component {
 		this.state = {articles: [], searchText: props.searchText, tweets: [], stockname: ''}
 	}
 
-	componentWillReceiveProps(newProps) {
-		if (this.state.tweets.length === 10)
-			this.setState({searchText: newProps.searchText, tweets: []});
-		else {
-			this.setState({searchText: newProps.searchText});
+	componentWillReceiveProps(nextProps) {
+		if (this.props !== nextProps) {
+
+			if (this.state.tweets.length === 10){
+				if (this.props.searchText.toUpperCase() === nextProps.searchText.toUpperCase())
+					return;
+				this.setState({searchText: nextProps.searchText, tweets: []});
+			}
+			else {
+				this.setState({searchText: nextProps.searchText});
+			}
 		}
 	}
 
@@ -89,8 +95,6 @@ class Content extends React.Component {
 	}
 
 	render () {
-
-
 		return (
 				<div className='container-fluid'>
 		          <div className='row' style={{marginTop:'1em'}}>

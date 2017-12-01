@@ -24,7 +24,7 @@ class HomeView extends React.Component {
   resetClick() {
       if (this.state.searched === false)
         return;
-        
+
       this.setState({searched: false});
 
       // update children
@@ -37,7 +37,7 @@ class HomeView extends React.Component {
         return;
     }
 
-    this.setState({searched: true});
+    this.setState({searched: this.state.fieldValue !== ''});
 
     // update children
     this.setState({searchText: this.state.fieldValue})
@@ -57,6 +57,7 @@ class HomeView extends React.Component {
 
         // update children
         this.setState({searchText: this.state.fieldValue})
+        this.setState({fieldValue: ''})
         ev.preventDefault();
     }
   }

@@ -58,11 +58,11 @@ class Rating extends React.Component {
       const url = `http://localhost:3000/api/rate?stockId=${this.props.stockname}`
       const that = this;
       fetch(url)
-      .then(function(response) { 
+      .then(function(response) {
       	return response.json()
       }).then(function(json) {
       	let rating = json.price_next_week / json.price_next_day;
-      	
+
 
         let prices = json.prices
         let arr = prices.slice(0, prices.length)
@@ -94,28 +94,20 @@ class Rating extends React.Component {
       data = Object.assign(data, defaults)
       data.global.legend.display = false
 
-      content = ( <div>
+      content = ( <div style={{marginTop: '1em'}}>
                     <Line data={data}/>
-                    <h5> Predicted Price </h5>
-                    <div>
-                      <h7> Next Day: {this.state.json.price_next_day.toFixed(2)} </h7>
-                    </div>
-                    <div>
-                      <h7> Next Week: {this.state.json.price_next_week.toFixed(2)} </h7>
-                    </div>
                   </div>
             )
     }
 
 		return (
-			<div>
-      	<div>
-          <h2> Historical Stock Price</h2>
-          <RangeSelector activePill={this.state.activePill} updateRange={this.updateRange} />
-          {content}
-          
-        </div>
-      </div>
+			<div style={{overflowY: 'scroll'}}>
+              	<div>
+                  <h3> Historical Stock Price</h3>
+                  <RangeSelector activePill={this.state.activePill} updateRange={this.updateRange} />
+                  {content}
+                </div>
+             </div>
 		)
 	}
 }

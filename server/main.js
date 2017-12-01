@@ -69,17 +69,24 @@ io = io.on('connection', function (socket) {
     });
 
     socket.on('getStockInfo', function(stockname) {
-        console.log('getting stock info about ' + stockname);
+//        console.log('getting stock info about ' + stockname);
 
         yahooFinance.quote({
           symbol: stockname,
           modules: [ 'price' ]
       }, function (err, data) {
+              console.log('getting stock info about ' + stockname);
+              if (err){
+                  return;
+              }
               var priceInfo =
                   {
                       company: data.price.longName,
                       regularMarketPrice: data.price.regularMarketPrice,
                       regularMarketTime: data.price.regularMarketTime,
+                      exchange: data.price.exchange,
+                      currency: data.price.currency,
+                      marketChange: data.price.regularMarketChange,
                   }
               socket.emit('stockPriceInfo', priceInfo);
         });
@@ -126,7 +133,7 @@ if (project.env === 'development') {
 
         return res.json(doc)
       })
-  }); 
+  });
 
   app.get('/api/rateAAPL', function(req, res) {
    db.collection("stock").findOne({_id:"AAPL"}, function(err, doc) {
@@ -141,8 +148,8 @@ if (project.env === 'development') {
     let objects = [];
     //console.log(stockId);
     db.collection("stock").findOne({ _id: stockId }, { articles: 1 }, function(err, doc) {
-      if (err || !doc.articles) {
-        res.end(); 
+      if (err || !doc || !doc.articles) {
+        res.end();
         return;
       }
       for (let i = 0; i < doc.articles.length; i++) {
