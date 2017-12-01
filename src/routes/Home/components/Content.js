@@ -26,10 +26,8 @@ class Content extends React.Component {
 	    const url = 'http://localhost:3000/api/articles/' + that.state.stockname;
 	    fetch(url)
 	    .then(function(response) {
-	    	console.log(response);
 	    	return response.json()
 	    }).then(function(articles) {
-	    	console.log(articles);
 	    	that.setState({articles: articles});
 	    })
 	    .catch(function(error) { console.log("Error", error) })

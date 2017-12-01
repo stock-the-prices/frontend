@@ -53,8 +53,6 @@ class Stock extends React.Component {
         const socket = io('http://localhost:3002');
 
         socket.on('stockPriceInfo', function (data) {
-            console.log("got data back!");
-            console.log(data);
             that.setState(
                 {
                     company: data.company,
