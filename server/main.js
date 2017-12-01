@@ -8,8 +8,8 @@ const compress = require('compression')
 const TwitterStreamChannels = require('twitter-stream-channels')
 const credentials = require('../twitter-credentials.json')
 const client = new TwitterStreamChannels(credentials)
-const ObjectID = require('mongodb').ObjectID;
-const MongoClient = require('mongodb').MongoClient;
+const ObjectID = require('mongodb').ObjectID
+const MongoClient = require('mongodb').MongoClient
 let db;
 
 MongoClient.connect("mongodb://dqianthebest:password@ds131900.mlab.com:31900/heroku_n36xdb93", function(err, database) {
@@ -133,15 +133,7 @@ if (project.env === 'development') {
 
         return res.json(doc)
       })
-  });
-
-  app.get('/api/rateAAPL', function(req, res) {
-   db.collection("stock").findOne({_id:"AAPL"}, function(err, doc) {
-      if (err) { res.end(); return; }
-      res.json(doc);
-      return;
-    });
-  });
+  })
 
   app.get('/api/articles/:stockId', function(req, res) {
     const stockId = req.params.stockId;
