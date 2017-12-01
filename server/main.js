@@ -8,7 +8,7 @@ const compress = require('compression')
 const TwitterStreamChannels = require('twitter-stream-channels')
 const credentials = require('../twitter-credentials.json')
 const client = new TwitterStreamChannels(credentials)
-
+const ObjectID = require('mongodb').ObjectID;
 const MongoClient = require('mongodb').MongoClient;
 let db;
 
@@ -127,6 +127,33 @@ if (project.env === 'development') {
         return res.json(doc)
       })
   }); 
+
+  app.get('/api/rateAAPL', function(req, res) {
+   db.collection("stock").findOne({_id:"AAPL"}, function(err, doc) {
+      if (err) { res.end(); return; }
+      res.json(doc);
+      return;
+    });
+  });
+
+  app.get('/api/articles/:stockId', function(req, res) {
+    const stockId = req.params.stockId;
+    let objects = [];
+    //console.log(stockId);
+    db.collection("stock").findOne({ _id: stockId }, { articles: 1 }, function(err, doc) {
+      if (err || !doc.articles) {
+        res.end(); 
+        return;
+      }
+      for (let i = 0; i < doc.articles.length; i++) {
+        objects[i] = new ObjectID(doc.articles[i]);
+      }
+      db.collection("article").find({"_id" : {"$in" : objects}}).toArray(function(err, docs) {
+        res.json(docs);
+      });
+    });
+
+  });
 
   // Serve static assets from ~/public since Webpack is unaware of
   // these files. This middleware doesn't need to be enabled outside

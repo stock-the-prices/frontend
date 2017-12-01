@@ -55,7 +55,6 @@ class Rating extends React.Component {
     }
 
     fetchData(){
-    	console.log(this.props.stockname);
       const url = `http://localhost:3000/api/rate?stockId=${this.props.stockname}`
       const that = this;
       fetch(url)
@@ -72,7 +71,6 @@ class Rating extends React.Component {
         console.log(json)
       })
       .catch(function(error) { console.log("Error", error) })
-
 	}
 
 
